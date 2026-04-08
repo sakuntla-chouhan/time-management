@@ -5,7 +5,7 @@
 
 const API_BASE_URL = (['localhost', '127.0.0.1', ''].includes(window.location.hostname))
   ? 'http://localhost:5000'
-  : ''; // Use relative path in production if served from the same domain
+  : 'https://time-management-43i9.onrender.com';
 
 // ── Helper: fetch with auth token ─────────────────────────────
 async function apiFetch(endpoint, options = {}) {
