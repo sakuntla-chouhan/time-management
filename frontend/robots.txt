@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://time-management-43i9.onrender.com/sitemap.xml

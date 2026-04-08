@@ -1,3 +1,4 @@
+import helmet from 'helmet';
 import express from 'express';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
@@ -14,6 +15,20 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
+
+// ── Security Headers ───────────────────────────────────────────
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "script-src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      "style-src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      "font-src": ["'self'", "https://fonts.gstatic.com"],
+      "img-src": ["'self'", "data:", "https://*"],
+      "connect-src": ["'self'", "https://*", "http://localhost:5000"]
+    },
+  },
+}));
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'studycoach_super_secret_key_2024';
 
