@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudyCoach AI — Smart Learning & Time Management</title>
+  <meta name="description"
+    content="AI-powered learning coach. Get a personalized study plan for any topic, powered by Gemini AI." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- TOP NAVBAR -->
+  <nav class="topnav" id="topnav">
+    <div class="topnav-inner">
+      <a class="nav-brand" href="index.html">
+        <span class="nav-brand-icon">🎓</span>
+        <span class="nav-brand-text">StudyCoach <span class="nav-ai">AI</span></span>
+      </a>
+      <div class="nav-right">
+        <button class="btn-nav-outline" id="btnThemeToggle" title="Toggle Night Mode">🌙</button>
+        <div class="nav-user-info" id="navUserInfo"></div>
+        <button class="btn-nav-outline" id="btnHistory">My History</button>
+        <button class="btn-nav-outline" id="btnLogout">Sign Out</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO / Landing -->
+  <section id="hero" class="hero-section">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Powered by Gemini AI
+      </div>
+      <h1 class="hero-title">Learn <span class="gradient-text">Anything</span><br />the Smart Way</h1>
+      <p class="hero-subtitle">Type any topic — Gemini AI will instantly build you a complete prerequisite check,
+        personalized time plan, step-by-step lessons, and a cheat sheet.</p>
+
+      <form class="topic-form" id="topicForm">
+        <div class="form-row">
+          <div class="form-group form-grow">
+            <label for="topicInput">📚 What do you want to learn?</label>
+            <input type="text" id="topicInput"
+              placeholder="e.g. Recursion, Photosynthesis, World War II, Trigonometry..." autocomplete="off"
+              spellcheck="false" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="timeInput">⏱️ Available Time</label>
+            <select id="timeInput">
+              <option value="1">1 Hour</option>
+              <option value="1.5">1.5 Hours</option>
+              <option value="2" selected>2 Hours</option>
+              <option value="3">3 Hours</option>
+              <option value="4">4 Hours</option>
+              <option value="5">5+ Hours</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="levelInput">🎯 Your Level</label>
+            <select id="levelInput">
+              <option value="beginner" selected>Complete Beginner</option>
+              <option value="basic">Know the Basics</option>
+              <option value="intermediate">Intermediate</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn-start" id="startBtn">
+          <span class="btn-icon">✨</span>
+          <span id="startBtnText">Generate My Learning Plan</span>
+        </button>
+      </form>
+
+      <!-- Sample Topics -->
+      <div class="sample-topics">
+        <span class="sample-label">Try:</span>
+        <button class="chip" data-topic="Recursion">Recursion</button>
+        <button class="chip" data-topic="Photosynthesis">Photosynthesis</button>
+        <button class="chip" data-topic="Binary Search">Binary Search</button>
+        <button class="chip" data-topic="French Revolution">French Revolution</button>
+        <button class="chip" data-topic="Quadratic Equations">Quadratic Equations</button>
+        <button class="chip" data-topic="Machine Learning">Machine Learning</button>
+        <button class="chip" data-topic="Newton's Laws">Newton's Laws</button>
+        <button class="chip" data-topic="Linked Lists">Linked Lists</button>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- LEARNING SESSION -->
+  <div id="session" class="session hidden">
+    <!-- Sticky Nav -->
+    <div class="session-nav" id="sessionNav">
+      <div class="session-nav-inner">
+        <button class="btn-back" id="navBack">← New Topic</button>
+        <div class="step-pills" id="stepPills">
+          <button class="step-pill active" data-step="0">1. Prerequisites</button>
+          <button class="step-pill" data-step="1">2. Time Plan</button>
+          <button class="step-pill" data-step="2">3. Learn</button>
+          <button class="step-pill" data-step="3">4. Visualize</button>
+          <button class="step-pill" data-step="4">5. Q&amp;A</button>
+          <button class="step-pill" data-step="5">6. Practice</button>
+          <button class="step-pill" data-step="6">7. Cheat Sheet</button>
+        </div>
+        <div class="session-topic-tag" id="sessionTopicTag"></div>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progressBarFill"></div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <main class="session-main">
+
+      <section class="step-section active" id="step-0">
+        <div class="step-header">
+          <div class="step-num">Step 1 of 7</div>
+          <h2 class="step-title">🔍 Prerequisite Check</h2>
+          <p class="step-desc">Here's what you should know before we begin. Don't skip this!</p>
+        </div>
+        <div id="prereqContent"></div>
+        <div class="step-footer"><button class="btn-next" id="btn-next-0">Continue to Time Plan →</button></div>
+      </section>
+
+      <section class="step-section" id="step-1">
+        <div class="step-header">
+          <div class="step-num">Step 2 of 7</div>
+          <h2 class="step-title">⏱️ Your Smart Time Plan</h2>
+          <p class="step-desc">Optimized schedule for your available time.</p>
+        </div>
+        <div id="timePlanContent"></div>
+        <div class="step-footer"><button class="btn-next" id="btn-next-1">Start Learning →</button></div>
+      </section>
+
+      <section class="step-section" id="step-2">
+        <div class="step-header">
+          <div class="step-num">Step 3 of 7</div>
+          <h2 class="step-title">📖 Learning Path</h2>
+          <p class="step-desc">Click each concept to expand — simple first, then deep.</p>
+        </div>
+        <div id="learningContent"></div>
+        <div class="step-footer"><button class="btn-next" id="btn-next-2">See Visualizations →</button></div>
+      </section>
+
+      <section class="step-section" id="step-3">
+        <div class="step-header">
+          <div class="step-num">Step 4 of 7</div>
+          <h2 class="step-title">🎨 Visualizations & Diagrams</h2>
+          <p class="step-desc">See the concept visually — diagrams, tables, and flowcharts.</p>
+        </div>
+        <div id="vizContent"></div>
+        <div class="step-footer"><button class="btn-next" id="btn-next-3">Go to Q&amp;A →</button></div>
+      </section>
+
+      <section class="step-section" id="step-4">
+        <div class="step-header">
+          <div class="step-num">Step 5 of 7</div>
+          <h2 class="step-title">💬 Interactive Q&amp;A</h2>
+          <p class="step-desc">Check your understanding! Answer before peeking at explanations.</p>
+        </div>
+        <div id="qaContent"></div>
+        <div class="step-footer"><button class="btn-next" id="btn-next-4" style="display:none">Go to Practice →</button>
+        </div>
+      </section>
+
+      <section class="step-section" id="step-5">
+        <div class="step-header">
+          <div class="step-num">Step 6 of 7</div>
+          <h2 class="step-title">📝 Practice Mode</h2>
+          <p class="step-desc">Graded problems from Easy → Hard. Use hints if you're stuck!</p>
+        </div>
+        <div id="practiceContent"></div>
+        <div class="step-footer"><button class="btn-next" id="btn-next-5" style="display:none">See Cheat Sheet
+            →</button></div>
+      </section>
+
+      <section class="step-section" id="step-6">
+        <div class="step-header">
+          <div class="step-num">Step 7 of 7</div>
+          <h2 class="step-title">📋 Your Cheat Sheet</h2>
+          <p class="step-desc">Everything condensed into one power summary. Save it!</p>
+        </div>
+        <div id="cheatContent"></div>
+        <div class="step-footer completion-footer">
+          <div class="completion-msg">🎉 Congratulations! You've completed the session!</div>
+          <div class="completion-actions">
+            <button class="btn-copy" id="btnCopy">📋 Copy Cheat Sheet</button>
+            <button class="btn-print" onclick="window.print()">🖨️ Print</button>
+            <button class="btn-new" id="btnNew">🔄 Learn Something New</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- HISTORY MODAL -->
+  <div id="historyModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📚 My Learning History</h2>
+        <button class="btn-close" id="btnCloseHistory">&times;</button>
+      </div>
+      <div class="modal-body" id="historyList">
+        <div class="loading-spinner">⌛ Loading your sessions...</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

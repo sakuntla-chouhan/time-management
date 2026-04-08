@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up — StudyCoach AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="auth.css"/>
+</head>
+<body>
+  <div class="auth-bg">
+    <div class="auth-orb auth-orb-1"></div>
+    <div class="auth-orb auth-orb-2"></div>
+  </div>
+
+  <div class="auth-wrapper">
+    <div class="auth-left">
+      <div class="brand">
+        <span class="brand-icon">🎓</span>
+        <span class="brand-name">StudyCoach <span class="brand-ai">AI</span></span>
+      </div>
+      <h1 class="auth-headline">Start Learning<br/><span class="highlight">With AI Today.</span></h1>
+      <p class="auth-sub">Create your free account and get a personalized learning plan for any topic — powered by Gemini AI.</p>
+      <div class="auth-features">
+        <div class="feat"><span class="feat-icon">🚀</span><span>Free to get started</span></div>
+        <div class="feat"><span class="feat-icon">🧠</span><span>AI generates real content</span></div>
+        <div class="feat"><span class="feat-icon">📊</span><span>Track your sessions</span></div>
+        <div class="feat"><span class="feat-icon">🎯</span><span>Personalized to your level</span></div>
+      </div>
+    </div>
+
+    <div class="auth-right">
+      <div class="auth-card">
+        <div class="auth-card-header">
+          <h2>Create Account ✨</h2>
+          <p>Join thousands of students learning smarter</p>
+        </div>
+
+        <div class="error-box" id="errorBox"></div>
+        <div class="success-box" id="successBox"></div>
+
+        <form class="auth-form" id="signupForm">
+          <div class="field-group">
+            <label>Full Name</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" id="name" placeholder="Your full name" required autocomplete="name"/>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Email Address</label>
+            <div class="input-wrap">
+              <span class="input-icon">📧</span>
+              <input type="email" id="email" placeholder="you@example.com" required autocomplete="email"/>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Password</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="password" placeholder="Min 6 characters" required autocomplete="new-password"/>
+              <button type="button" class="toggle-pw" id="togglePw">👁️</button>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Confirm Password</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔐</span>
+              <input type="password" id="confirmPassword" placeholder="Repeat your password" required/>
+            </div>
+          </div>
+          <button type="submit" class="btn-auth" id="submitBtn">
+            <span id="btnText">Create Account</span>
+            <span id="btnLoader" class="btn-loader hidden">⏳</span>
+          </button>
+        </form>
+
+        <div class="auth-divider"><span>or</span></div>
+        <div class="auth-switch">
+          Already have an account? <a href="login.html">Sign in →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    const API = window.StudyCoachAPI;
+
+    document.getElementById('togglePw').onclick = () => {
+      const pw = document.getElementById('password');
+      pw.type = pw.type === 'password' ? 'text' : 'password';
+    };
+
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name     = document.getElementById('name').value.trim();
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirm  = document.getElementById('confirmPassword').value;
+      const errBox   = document.getElementById('errorBox');
+      const sucBox   = document.getElementById('successBox');
+      const btnText  = document.getElementById('btnText');
+      const btnLoader= document.getElementById('btnLoader');
+
+      errBox.style.display = 'none';
+      sucBox.style.display = 'none';
+
+      if (password.length < 6) {
+        errBox.textContent = 'Password must be at least 6 characters.';
+        errBox.style.display = 'block'; return;
+      }
+      if (password !== confirm) {
+        errBox.textContent = 'Passwords do not match.';
+        errBox.style.display = 'block'; return;
+      }
+
+      btnText.textContent = 'Creating account...';
+      btnLoader.classList.remove('hidden');
+      document.getElementById('submitBtn').disabled = true;
+
+      try {
+        const res = await API.signup(name, email, password);
+        localStorage.setItem('sc_token', res.token);
+        localStorage.setItem('sc_user',  JSON.stringify(res.user));
+        sucBox.textContent = '🎉 Account created! Redirecting...';
+        sucBox.style.display = 'block';
+        setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+      } catch (err) {
+        errBox.textContent = err.message || 'Signup failed. Please try again.';
+        errBox.style.display = 'block';
+      } finally {
+        btnText.textContent = 'Create Account';
+        btnLoader.classList.add('hidden');
+        document.getElementById('submitBtn').disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
